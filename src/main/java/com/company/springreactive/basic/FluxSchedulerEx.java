@@ -1,6 +1,8 @@
 package com.company.springreactive.basic;
 
+import io.reactivex.rxjava3.core.Flowable;
 import lombok.extern.slf4j.Slf4j;
+import reactor.core.Disposable;
 import reactor.core.publisher.Flux;
 import reactor.core.scheduler.Schedulers;
 
@@ -15,7 +17,7 @@ import java.time.Duration;
 public class FluxSchedulerEx {
 
     public static void main(String[] args) {
-        Flux.range(1, 10)
+        Disposable sub1 = Flux.range(1, 10)
                 .publishOn(Schedulers.newSingle("publisher"))
                 .log()
                 .subscribeOn(Schedulers.newSingle("subcriber"))
@@ -23,8 +25,13 @@ public class FluxSchedulerEx {
 
         log.info("Exit");
 
-        Flux.interval(Duration.ofMillis(500))
+        sub1.dispose();
+
+        Disposable subscribe = Flux.interval(Duration.ofMillis(500))
                 .subscribe(e -> log.info("onNext: {}", e));
+
+        subscribe.dispose();
+
 
     }
 }
