@@ -24,7 +24,8 @@ public class StressTest {
                 for (int i = 0; i < 10000; i++) {
                     String result =
                             client.sendAsync(HttpRequest.newBuilder(
-                                            new URI("http://www.jeom.shop")).GET().build(), HttpResponse.BodyHandlers.ofString())
+                                            new URI("https://server.wearedj.club/test/cors-get")).GET().build(),
+                                            HttpResponse.BodyHandlers.ofString())
                                     .thenApply(HttpResponse::body)
                                     .get();
                     if (i % 5 == 0) {
@@ -39,13 +40,15 @@ public class StressTest {
 
         List<Runnable> list = new ArrayList<>();
 
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 1_000_000; i++) {
             list.add(r);
         }
 
         list.stream()
                 .parallel()
-                .forEach(Runnable::run);
+                .forEach(t -> {
+                    t.run();
+                });
 
     }
 
