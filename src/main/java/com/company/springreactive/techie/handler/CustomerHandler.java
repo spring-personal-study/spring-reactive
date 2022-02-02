@@ -20,4 +20,24 @@ public class CustomerHandler {
         Flux<Customer> customerList = dao.getCustomerList();
         return ServerResponse.ok().body(customerList, Customer.class);
     }
+
+    public Mono<ServerResponse> findCustomer(ServerRequest request) {
+        String input = request.pathVariable("input");
+        int customerId = Integer.parseInt(input);
+        //Mono<Customer> single = dao.getCustomerList().filter(c -> c.getId() == customerId).take(1).single();
+        Mono<Customer> result = dao.getCustomerList().filter(c -> c.getId() == customerId).next(); //same as beyond
+        return ServerResponse.ok().body(result, Customer.class);
+    }
+
+    /**
+     * @param request .body {
+     *                        "id":6,
+     *                        "name":"customerId6"
+     *                      }
+     */
+    public Mono<ServerResponse> saveCustomer(ServerRequest request) {
+        Mono<Customer> customerMono = request.bodyToMono(Customer.class);
+        Mono<String> map = customerMono.map(dto -> dto.getId() + ":" + dto.getName());
+        return ServerResponse.ok().body(map, Customer.class);
+    }
 }

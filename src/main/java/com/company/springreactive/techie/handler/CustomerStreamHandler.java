@@ -19,6 +19,7 @@ public class CustomerStreamHandler {
     public Mono<ServerResponse> getCustomers(ServerRequest request) {
         Flux<Customer> customersStream = dao.getCustomersStream();
         return ServerResponse.ok()
+                .contentType(MediaType.TEXT_EVENT_STREAM)
                 .body(customersStream, Customer.class);
     }
 }
