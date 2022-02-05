@@ -1,7 +1,8 @@
 package com.company.springreactive.techie.controller;
 
-import com.company.springreactive.techie.dto.Customer;
+import com.company.springreactive.techie.domain.dto.CustomerDTO;
 import com.company.springreactive.techie.service.CustomerService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,16 +14,16 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/customers")
+@RequiredArgsConstructor
 public class CustomerController {
 
-    @Autowired
-    private CustomerService service;
+    private final CustomerService service;
 
     /**
      * not using webFlux
      */
     @GetMapping(value = "/not-stream")
-    public List<Customer> getAllCustomer() {
+    public List<CustomerDTO> getAllCustomer() {
         return service.loadAllCustomers();
     }
 
@@ -30,7 +31,7 @@ public class CustomerController {
      * using webFlux
      */
     @GetMapping(value = "/stream", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-    public Flux<Customer> getAllCustomerStream() {
+    public Flux<CustomerDTO> getAllCustomerStream() {
         return service.loadAllCustomersStream();
     }
 }

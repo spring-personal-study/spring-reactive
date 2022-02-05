@@ -1,7 +1,8 @@
-package com.company.springreactive.techie.handler;
+package com.company.springreactive.techie.router.handler;
 
-import com.company.springreactive.techie.dao.CustomerDao;
-import com.company.springreactive.techie.dto.Customer;
+import com.company.springreactive.techie.service.dao.CustomerDao;
+import com.company.springreactive.techie.domain.dto.CustomerDTO;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,22 +12,22 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Service
+@RequiredArgsConstructor
 public class CustomerHandler {
 
-    @Autowired
-    private CustomerDao dao;
+    private final CustomerDao dao;
 
     public Mono<ServerResponse> loadCustomers(ServerRequest request) {
-        Flux<Customer> customerList = dao.getCustomerList();
-        return ServerResponse.ok().body(customerList, Customer.class);
+        Flux<CustomerDTO> customerList = dao.getCustomerList();
+        return ServerResponse.ok().body(customerList, CustomerDTO.class);
     }
 
     public Mono<ServerResponse> findCustomer(ServerRequest request) {
         String input = request.pathVariable("input");
         int customerId = Integer.parseInt(input);
         //Mono<Customer> single = dao.getCustomerList().filter(c -> c.getId() == customerId).take(1).single();
-        Mono<Customer> result = dao.getCustomerList().filter(c -> c.getId() == customerId).next(); //same as beyond
-        return ServerResponse.ok().body(result, Customer.class);
+        Mono<CustomerDTO> result = dao.getCustomerList().filter(c -> c.getId() == customerId).next(); //same as beyond
+        return ServerResponse.ok().body(result, CustomerDTO.class);
     }
 
     /**
@@ -36,8 +37,8 @@ public class CustomerHandler {
      *                      }
      */
     public Mono<ServerResponse> saveCustomer(ServerRequest request) {
-        Mono<Customer> customerMono = request.bodyToMono(Customer.class);
+        Mono<CustomerDTO> customerMono = request.bodyToMono(CustomerDTO.class);
         Mono<String> map = customerMono.map(dto -> dto.getId() + ":" + dto.getName());
-        return ServerResponse.ok().body(map, Customer.class);
+        return ServerResponse.ok().body(map, CustomerDTO.class);
     }
 }

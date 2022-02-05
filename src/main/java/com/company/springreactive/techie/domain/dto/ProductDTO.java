@@ -1,4 +1,4 @@
-package com.company.springreactive.techie.dto;
+package com.company.springreactive.techie.domain.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,7 +7,10 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Customer {
-    private int id;
+public class ProductDTO {
+
+    private String id;
     private String name;
+    private int qty;
+    private double price;
 }

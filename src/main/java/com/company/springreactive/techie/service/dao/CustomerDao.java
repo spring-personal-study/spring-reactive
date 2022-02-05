@@ -1,6 +1,6 @@
-package com.company.springreactive.techie.dao;
+package com.company.springreactive.techie.service.dao;
 
-import com.company.springreactive.techie.dto.Customer;
+import com.company.springreactive.techie.domain.dto.CustomerDTO;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Flux;
 
@@ -23,25 +23,25 @@ public class CustomerDao {
     /**
      * not using flux
      */
-    public List<Customer> getCustomers() {
+    public List<CustomerDTO> getCustomers() {
         return IntStream.rangeClosed(1, 10)
                 .peek(CustomerDao::sleepExecution)
                 .peek(i -> System.out.println("processing count : " + i))
-                .mapToObj(i -> new Customer(i, "customer" + i))
+                .mapToObj(i -> new CustomerDTO(i, "customer" + i))
                 .collect(Collectors.toList());
     }
 
-    public Flux<Customer> getCustomersStream() {
+    public Flux<CustomerDTO> getCustomersStream() {
         return Flux.range(1, 10)
                 .delayElements(Duration.ofSeconds(1))
                 .doOnNext(i -> System.out.println("processing count in stream flow : " + i))
-                .map(i -> new Customer(i, "customer" + i));
+                .map(i -> new CustomerDTO(i, "customer" + i));
     }
 
-    public Flux<Customer> getCustomerList() {
+    public Flux<CustomerDTO> getCustomerList() {
         return Flux.range(1, 50)
                 .doOnNext(i -> System.out.println("processing count in stream flow : " + i))
-                .map(i -> new Customer(i, "customer" + i));
+                .map(i -> new CustomerDTO(i, "customer" + i));
     }
 
 }

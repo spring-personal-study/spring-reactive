@@ -1,8 +1,8 @@
 package com.company.springreactive.techie.router;
 
-import com.company.springreactive.techie.handler.CustomerHandler;
-import com.company.springreactive.techie.handler.CustomerStreamHandler;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.company.springreactive.techie.router.handler.CustomerHandler;
+import com.company.springreactive.techie.router.handler.CustomerStreamHandler;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.reactive.function.server.RouterFunction;
@@ -10,13 +10,11 @@ import org.springframework.web.reactive.function.server.RouterFunctions;
 import org.springframework.web.reactive.function.server.ServerResponse;
 
 @Configuration
+@RequiredArgsConstructor
 public class RouterConfig {
 
-    @Autowired
-    private CustomerHandler handler;
-
-    @Autowired
-    private CustomerStreamHandler streamHandler;
+    private final CustomerHandler handler;
+    private final CustomerStreamHandler streamHandler;
 
     /**
      * Functional EndPoint

@@ -1,7 +1,8 @@
-package com.company.springreactive.techie.handler;
+package com.company.springreactive.techie.router.handler;
 
-import com.company.springreactive.techie.dao.CustomerDao;
-import com.company.springreactive.techie.dto.Customer;
+import com.company.springreactive.techie.service.dao.CustomerDao;
+import com.company.springreactive.techie.domain.dto.CustomerDTO;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
@@ -11,15 +12,15 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Service
+@RequiredArgsConstructor
 public class CustomerStreamHandler {
 
-    @Autowired
-    private CustomerDao dao;
+    private final CustomerDao dao;
 
     public Mono<ServerResponse> getCustomers(ServerRequest request) {
-        Flux<Customer> customersStream = dao.getCustomersStream();
+        Flux<CustomerDTO> customersStream = dao.getCustomersStream();
         return ServerResponse.ok()
                 .contentType(MediaType.TEXT_EVENT_STREAM)
-                .body(customersStream, Customer.class);
+                .body(customersStream, CustomerDTO.class);
     }
 }

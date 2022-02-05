@@ -19,10 +19,18 @@ repositories {
 }
 
 dependencies {
-    // web
+    // disable web: if it enables, will prevents to use functional endpoints ... etc
     //implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
+    implementation 'org.springframework.boot:spring-boot-starter-data-mongodb-reactive'
     implementation 'org.springframework.boot:spring-boot-starter-test'
+    //implementation 'org.springframework.data:spring-data-r2dbc'
+
+    // data-jpa
+    // implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+    // database - h2
+    runtimeOnly 'com.h2database:h2:1.4.200'
 
     compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
